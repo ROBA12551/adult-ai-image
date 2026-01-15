@@ -1,0 +1,22 @@
+# robots.txt for AnimeGallery
+
+User-agent: *
+Allow: /
+Disallow: /netlify/
+Disallow: /.netlify/
+Disallow: /api/
+
+# Sitemaps
+Sitemap: https://your-site.netlify.app/sitemap.xml
+
+# Adult content notice
+# Age-restricted content - 18+ only
+# All crawlers must respect age restrictions
+
+# Prevent image scraping
+User-agent: *
+Disallow: /images/
+Allow: /images/thumbnails/
+
+# Rate limiting recommendations
+Crawl-delay: 1

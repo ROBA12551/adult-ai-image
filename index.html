@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO最適化 -->
+  <title>AnimeGallery - High Quality Adult Anime Character Images | 18+ アニメキャラ画像ギャラリー</title>
+  <meta name="description" content="Download high-quality adult anime character images. Free HD wallpapers, fan art, and illustrations. 18+ 高品質アダルトアニメキャラクター画像を無料ダウンロード">
+  <meta name="keywords" content="anime images, adult anime, anime characters, HD wallpapers, anime art, hentai, ecchi, アニメ画像, アダルトアニメ, キャラクター画像, 壁紙, エロアニメ">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://your-site.netlify.app/">
+  
+  <!-- 年齢制限 -->
+  <meta name="rating" content="adult">
+  <meta name="age-gate" content="18+">
+  
+  <!-- OGP (SNS共有最適化) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AnimeGallery - Premium Adult Anime Character Images">
+  <meta property="og:description" content="Download high-quality adult anime character images. Free HD wallpapers and illustrations. 18+ only.">
+  <meta property="og:url" content="https://your-site.netlify.app/">
+  <meta property="og:image" content="https://your-site.netlify.app/images/ogp-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="AnimeGallery">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AnimeGallery - Premium Adult Anime Images">
+  <meta name="twitter:description" content="High-quality adult anime character images. Free HD downloads. 18+">
+  <meta name="twitter:image" content="https://your-site.netlify.app/images/twitter-preview.jpg">
+  <meta name="twitter:site" content="@YourTwitter">
+  
+  <!-- 構造化データ (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": "AnimeGallery - Adult Anime Character Images",
+    "description": "High-quality adult anime character image gallery with free downloads",
+    "url": "https://your-site.netlify.app/",
+    "image": "https://your-site.netlify.app/images/logo.png",
+    "inLanguage": ["ja", "en"],
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": 18
+    }
+  }
+  </script>
+  
+  <meta name="theme-color" content="#ff69b4">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #ffffff;
+      --primary-dark: #000000;
+      --secondary: #9370db;
+      --dark: #1a1a2e;
+      --darker: #0f0f1e;
+      --text: #e0e0e0;
+      --text-light: #a0a0a0;
+      --border: #333;
+      --bg-card: #16213e;
+      --success: #4ade80;
+      --warning: #fbbf24;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* 年齢確認モーダル */
+    .age-gate {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(20, 20, 20, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+    }
+    
+    .age-gate.hidden {
+      display: none;
+    }
+    
+
+    .age-gate h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    
+    .age-gate p {
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: var(--text-light);
+    }
+    
+    .age-gate-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .age-gate-btn {
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .age-gate-btn.enter {
+      background: var(--primary);
+      color: rgb(0, 0, 0);
+    }
+    
+    .age-gate-btn.enter:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);
+    }
+    
+    .age-gate-btn.exit {
+      background: #f51414;
+      color: var(--text);
+    }
+    
+    .age-gate-btn.exit:hover {
+      background: #ffffff;
+    }
+    
+    /* ヘッダー */
+    header {
+      background: rgba(26, 26, 46, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid var(--primary);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .nav-link {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .nav-link:hover {
+      border-color: var(--primary);
+      background: rgba(255, 105, 180, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .lang-switch {
+      padding: 10px 20px;
+      background: var(--secondary);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .lang-switch:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+    
+    /* コンテナ */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    /* ヒーロー */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(147, 112, 219, 0.1));
+      border-radius: 20px;
+      margin-bottom: 40px;
+      border: 2px solid var(--border);
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    /* 検索バー */
+    .search-bar {
+      margin-bottom: 40px;
+      display: flex;
+      gap: 10px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 15px 20px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 16px;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.1);
+    }
+    
+    .search-btn {
+      padding: 15px 30px;
+      background: var(--primary);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    /* フィルター */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .filter-btn:hover {
+      border-color: var(--primary);
+      background: rgba(255, 105, 180, 0.1);
+    }
+    
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    /* ギャラリーグリッド */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .image-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .image-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+    }
+    
+    .image-wrapper {
+      width: 100%;
+      height: 350px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(147, 112, 219, 0.1));
+    }
+    
+    .image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .image-card:hover img {
+      transform: scale(1.1);
+    }
+    
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .image-card:hover .image-overlay {
+      opacity: 1;
+    }
+    
+    .image-info {
+      padding: 15px;
+    }
+    
+    .image-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    
+    .image-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+    
+    .image-tags {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    
+    .tag {
+      padding: 4px 10px;
+      background: rgba(255, 105, 180, 0.2);
+      border-radius: 5px;
+      font-size: 11px;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .image-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    
+    .action-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+    }
+    
+    .action-btn.download {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    .action-btn.download:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* ローディング */
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* もっと見るボタン */
+    .load-more {
+      text-align: center;
+      margin: 40px 0;
+    }
+    
+    .load-more-btn {
+      padding: 15px 50px;
+      background: var(--secondary);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .load-more-btn:hover {
+      opacity: 0.8;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(147, 112, 219, 0.4);
+    }
+    
+    /* モーダル */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      max-width: 900px;
+      max-height: 90vh;
+      background: var(--bg-card);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-image {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      background: var(--darker);
+    }
+    
+    .modal-info {
+      padding: 25px;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transform: rotate(90deg);
+    }
+    
+    /* 通知 */
+    .notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 20px 30px;
+      background: var(--bg-card);
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      color: var(--text);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10001;
+      max-width: 400px;
+    }
+    
+    .notification.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .notification.success {
+      border-color: var(--success);
+    }
+    
+    /* フッター */
+    footer {
+      background: var(--darker);
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 2px solid var(--border);
+      margin-top: 60px;
+    }
+    
+    footer p {
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .footer-link {
+      color: var(--primary);
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      opacity: 0.7;
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+      
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+      }
+      
+      .image-wrapper {
+        height: 250px;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .notification {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- 年齢確認ゲート -->
+  <div class="age-gate" id="ageGate">
+    <div class="age-gate-content">
+      <h2>🔞 Age Verification | 年齢確認</h2>
+      <p>
+        This website contains adult content.<br>
+        このサイトは18歳以上の方のみご利用いただけます。
+      </p>
+      <p>Are you 18 years or older?<br>18歳以上ですか?</p>
+      <div class="age-gate-buttons">
+        <button class="age-gate-btn enter" onclick="enterSite()">
+          Yes, I'm 18+ | はい、18歳以上です
+        </button>
+        <button class="age-gate-btn exit" onclick="exitSite()">
+          No, Exit | いいえ、退出
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ヘッダー -->
+  <header>
+    <div class="header-content">
+      <a href="/" class="logo">
+        <div class="logo-icon">🎨</div>
+        <span>AnimeGallery</span>
+      </a>
+      <nav>
+        <a href="/" class="nav-link">Gallery | ギャラリー</a>
+        <a href="policy.html" class="nav-link">Policy | 利用規約</a>
+        <a href="contact.html" class="nav-link">Contact | お問い合わせ</a>
+      </nav>
+      <button class="lang-switch" onclick="toggleLanguage()">
+        <span id="langText">EN / 日本語</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <div class="container">
+    <!-- ヒーローセクション -->
+    <div class="hero">
+      <h1 id="heroTitle">Premium Adult Anime Character Gallery</h1>
+      <p id="heroDesc">
+        High-quality adult anime character images, wallpapers, and illustrations. Free download, HD quality.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number" id="totalImages">0</div>
+          <div class="stat-label">Images | 画像数</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="totalDownloads">0</div>
+          <div class="stat-label">Downloads | DL数</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="totalCharacters">0</div>
+          <div class="stat-label">Characters | キャラ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 検索バー -->
+    <div class="search-bar">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="Search by character name, series, tags... | キャラクター名、作品名、タグで検索"
+      >
+      <button class="search-btn" onclick="searchImages()">
+        🔍 Search
+      </button>
+    </div>
+
+    <!-- フィルター -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all" onclick="filterImages('all')">
+        All | すべて
+      </button>
+      <button class="filter-btn" data-filter="new" onclick="filterImages('new')">
+        New | 新着
+      </button>
+      <button class="filter-btn" data-filter="popular" onclick="filterImages('popular')">
+        Popular | 人気
+      </button>
+      <button class="filter-btn" data-filter="hd" onclick="filterImages('hd')">
+        HD Quality
+      </button>
+    </div>
+
+    <!-- ギャラリー -->
+    <div class="gallery" id="gallery">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading images... | 画像を読み込み中...</p>
+      </div>
+    </div>
+
+    <!-- もっと見る -->
+    <div class="load-more">
+      <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+        Load More | もっと見る
+      </button>
+    </div>
+  </div>
+
+  <!-- モーダル -->
+  <div class="modal" id="imageModal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-content">
+      <img class="modal-image" id="modalImage" src="" alt="">
+      <div class="modal-info">
+        <h2 id="modalTitle"></h2>
+        <div class="image-meta">
+          <span id="modalSize"></span>
+          <span id="modalDate"></span>
+        </div>
+        <div class="image-tags" id="modalTags"></div>
+        <div class="image-actions">
+          <button class="action-btn download" onclick="downloadImage()">
+            ⬇️ Download HD
+          </button>
+          <button class="action-btn" onclick="shareImage()">
+            📤 Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 通知 -->
+  <div class="notification" id="notification"></div>
+
+  <!-- フッター -->
+  <footer>
+    <p>© 2026 AnimeGallery - Premium Adult Anime Character Images</p>
+    <p style="font-size: 14px; color: var(--text-light);">
+      All characters are fictional and 18+ years old. | すべてのキャラクターは架空のもので、18歳以上です。
+    </p>
+    <div class="footer-links">
+      <a href="policy.html" class="footer-link">Terms of Service | 利用規約</a>
+      <a href="policy.html" class="footer-link">Privacy Policy | プライバシーポリシー</a>
+      <a href="contact.html" class="footer-link">Contact Us | お問い合わせ</a>
+      <a href="#" class="footer-link">DMCA</a>
+    </div>
+  </footer>
+
+  <script>
+    // 状態管理
+    const state = {
+      images: [],
+      filteredImages: [],
+      currentFilter: 'all',
+      currentPage: 0,
+      imagesPerPage: 12,
+      currentLanguage: 'en',
+      currentImageId: null
+    };
+
+    // 年齢確認
+    function enterSite() {
+      localStorage.setItem('ageVerified', 'true');
+      document.getElementById('ageGate').classList.add('hidden');
+    }
+
+    function exitSite() {
+      window.location.href = 'https://www.google.com';
+    }
+
+    // ページ読み込み時の年齢確認
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('ageVerified') === 'true') {
+        document.getElementById('ageGate').classList.add('hidden');
+        loadImages();
+      }
+    });
+
+    // 画像読み込み
+    async function loadImages() {
+      try {
+        const response = await fetch('/.netlify/functions/get-images');
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          state.images = data.images;
+          state.filteredImages = data.images;
+          updateStats();
+          renderGallery();
+        }
+      } catch (error) {
+        console.error('Error loading images:', error);
+        showNotification('Failed to load images | 画像の読み込みに失敗しました');
+      }
+    }
+
+    // 統計更新
+    function updateStats() {
+      document.getElementById('totalImages').textContent = state.images.length;
+      document.getElementById('totalDownloads').textContent = 
+        state.images.reduce((sum, img) => sum + (img.downloads || 0), 0);
+      
+      const uniqueCharacters = new Set(state.images.map(img => img.character));
+      document.getElementById('totalCharacters').textContent = uniqueCharacters.size;
+    }
+
+    // ギャラリー描画
+    function renderGallery() {
+      const gallery = document.getElementById('gallery');
+      const start = state.currentPage * state.imagesPerPage;
+      const end = start + state.imagesPerPage;
+      const imagesToShow = state.filteredImages.slice(start, end);
+
+      if (state.currentPage === 0) {
+        gallery.innerHTML = '';
+      }
+
+      imagesToShow.forEach(image => {
+        const card = createImageCard(image);
+        gallery.appendChild(card);
+      });
+
+      // もっと見るボタンの表示/非表示
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      if (end >= state.filteredImages.length) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        loadMoreBtn.style.display = 'block';
+      }
+    }
+
+    // 画像カード作成
+    function createImageCard(image) {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+      card.onclick = () => openModal(image);
+
+      card.innerHTML = `
+        <div class="image-wrapper">
+          <img src="${image.thumbnail}" alt="${image.title}" loading="lazy">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="image-info">
+          <div class="image-title">${image.title}</div>
+          <div class="image-meta">
+            <span>💾 ${formatFileSize(image.size)}</span>
+            <span>⬇️ ${image.downloads || 0}</span>
+          </div>
+          <div class="image-tags">
+            ${image.tags.slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+          <div class="image-actions">
+            <button class="action-btn" onclick="event.stopPropagation(); likeImage('${image.id}')">
+              ❤️ Like
+            </button>
+            <button class="action-btn download" onclick="event.stopPropagation(); downloadImageDirect('${image.id}')">
+              ⬇️ DL
+            </button>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // フィルター
+    function filterImages(filter) {
+      state.currentFilter = filter;
+      state.currentPage = 0;
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+
+      switch (filter) {
+        case 'new':
+          state.filteredImages = [...state.images].sort((a, b) => 
+            new Date(b.uploadDate) - new Date(a.uploadDate)
+          );
+          break;
+        case 'popular':
+          state.filteredImages = [...state.images].sort((a, b) => 
+            (b.downloads || 0) - (a.downloads || 0)
+          );
+          break;
+        case 'hd':
+          state.filteredImages = state.images.filter(img => img.quality === 'HD');
+          break;
+        default:
+          state.filteredImages = state.images;
+      }
+
+      renderGallery();
+    }
+
+    // 検索
+    function searchImages() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      
+      if (!query) {
+        state.filteredImages = state.images;
+      } else {
+        state.filteredImages = state.images.filter(img => 
+          img.title.toLowerCase().includes(query) ||
+          img.character.toLowerCase().includes(query) ||
+          img.series.toLowerCase().includes(query) ||
+          img.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+      }
+
+      state.currentPage = 0;
+      renderGallery();
+    }
+
+    // もっと見る
+    function loadMore() {
+      state.currentPage++;
+      renderGallery();
+    }
+
+    // モーダル
+    function openModal(image) {
+      state.currentImageId = image.id;
+      document.getElementById('modalImage').src = image.fullUrl;
+      document.getElementById('modalTitle').textContent = image.title;
+      document.getElementById('modalSize').textContent = `💾 ${formatFileSize(image.size)}`;
+      document.getElementById('modalDate').textContent = `📅 ${formatDate(image.uploadDate)}`;
+      
+      const tagsContainer = document.getElementById('modalTags');
+      tagsContainer.innerHTML = image.tags.map(tag => 
+        `<span class="tag">${tag}</span>`
+      ).join('');
+
+      document.getElementById('imageModal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').classList.remove('show');
+      document.body.style.overflow = 'auto';
+    }
+
+    // ダウンロード
+    async function downloadImage() {
+      if (!state.currentImageId) return;
+      
+      try {
+        showNotification('Downloading... | ダウンロード中...');
+        
+        const response = await fetch('/.netlify/functions/download-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageId: state.currentImageId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          window.open(data.downloadUrl, '_blank');
+          showNotification('Download started! | ダウンロード開始!', 'success');
+        }
+      } catch (error) {
+        console.error('Download error:', error);
+        showNotification('Download failed | ダウンロード失敗');
+      }
+    }
+
+    async function downloadImageDirect(imageId) {
+      try {
+        const response = await fetch('/.netlify/functions/download-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          window.open(data.downloadUrl, '_blank');
+          showNotification('Download started! | ダウンロード開始!', 'success');
+        }
+      } catch (error) {
+        showNotification('Download failed | ダウンロード失敗');
+      }
+    }
+
+    // いいね
+    async function likeImage(imageId) {
+      try {
+        await fetch('/.netlify/functions/like-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageId })
+        });
+        showNotification('Liked! | いいね!', 'success');
+      } catch (error) {
+        console.error('Like error:', error);
+      }
+    }
+
+    // シェア
+    function shareImage() {
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({
+          title: 'AnimeGallery',
+          text: 'Check out this anime image!',
+          url: url
+        });
+      } else {
+        navigator.clipboard.writeText(url);
+        showNotification('URL copied! | URLをコピーしました!', 'success');
+      }
+    }
+
+    // 言語切り替え
+    function toggleLanguage() {
+      state.currentLanguage = state.currentLanguage === 'en' ? 'ja' : 'en';
+      // 言語切り替えロジック（簡易版）
+      showNotification('Language switched | 言語を切り替えました', 'success');
+    }
+
+    // 通知
+    function showNotification(message, type = 'info') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification show ${type}`;
+      setTimeout(() => notification.classList.remove('show'), 3000);
+    }
+
+    // ユーティリティ
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ja-JP');
+    }
+
+    // Enter キーで検索
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchImages();
+      });
+    });
+
+    // モーダルの外クリックで閉じる
+    document.getElementById('imageModal').addEventListener('click', (e) => {
+      if (e.target.id === 'imageModal') closeModal();
+    });
+  </script>
+</body>
+</html>
