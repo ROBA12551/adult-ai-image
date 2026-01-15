@@ -721,23 +721,12 @@
     imagesPerPage: 12
   };
 
-  // クリックで確実にダウンロード（CORSで落ちたら新規タブに逃がす）
-  function downloadByUrl(url) {
-    // まずは a[download] を試す（軽い）
-    try {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = url.split('/').pop() || 'image.jpg';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      return;
-    } catch (e) {}
-
-    // 失敗したら新規タブ
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
-  window.downloadByUrl = downloadByUrl; // ← onclick から確実に見えるようにする
+function downloadByUrl(url) {
+  // Netlify Function へ飛ばす（これが一番確実）
+  const dl = `/.netlify/functions/download?url=${encodeURIComponent(url)}`;
+  window.location.href = dl;
+}
+window.downloadByUrl = downloadByUrl;
 
   function enterSite() {
     localStorage.setItem('ageVerified', 'true');
