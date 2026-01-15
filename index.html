@@ -724,7 +724,19 @@
       currentLanguage: 'en',
       currentImageId: null
     };
-
+  function downloadByUrl(url) {
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop(); // ファイル名
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (e) {
+      alert('Download failed');
+      console.error(e);
+    }
+  }
     function enterSite() {
       localStorage.setItem('ageVerified', 'true');
       document.getElementById('ageGate').classList.add('hidden');
