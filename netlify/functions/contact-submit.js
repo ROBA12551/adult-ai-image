@@ -1,7 +1,5 @@
 // contact-submit.js - Discord Webhookを使用したお問い合わせフォーム処理
 
-const busboy = require('busboy');
-
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -38,8 +36,16 @@ exports.handler = async (event) => {
       };
     }
 
-    // FormDataのパース
-    const formData = await parseMultipartForm(event);
+    // FormDataのパース（multipart/form-dataの場合）
+    let formData;
+    
+    if (event.headers['content-type']?.includes('multipart/form-data')) {
+      // マルチパートの場合は簡易パーサーを使用
+      formData = await parseMultipartFormSimple(event);
+    } else {
+      // 通常のJSONの場合
+      formData = JSON.parse(event.body);
+    }
     
     console.log('[CONTACT] Form submission:', {
       messageType: formData.messageType,
@@ -112,6 +118,15 @@ exports.handler = async (event) => {
       timestamp: new Date().toISOString()
     };
 
+    // ファイル情報があれば追加
+    if (formData.file) {
+      embed.fields.push({
+        name: '📎 Attachment',
+        value: `File: ${formData.file.filename}\nSize: ${formatFileSize(formData.file.size)}\nType: ${formData.file.mimeType}`,
+        inline: false
+      });
+    }
+
     // Discord Webhookペイロード
     const webhookPayload = {
       username: 'AnimeGallery Contact',
@@ -119,79 +134,17 @@ exports.handler = async (event) => {
       embeds: [embed]
     };
 
-    // ファイルがある場合
-    let fileUploadResult = null;
-    if (formData.file) {
-      // ファイルサイズチェック（10MB）
-      const MAX_FILE_SIZE = 10 * 1024 * 1024;
-      if (formData.file.size > MAX_FILE_SIZE) {
-        return {
-          statusCode: 400,
-          headers,
-          body: JSON.stringify({ 
-            status: 'error', 
-            error: 'File too large. Maximum size is 10MB.'
-          })
-        };
-      }
+    // Discordに送信
+    const response = await fetch(DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(webhookPayload)
+    });
 
-      // Discord の場合、8MB以下でないとアップロードできない
-      if (formData.file.size <= 8 * 1024 * 1024) {
-        // 8MB以下の場合はDiscordに直接アップロード
-        try {
-          const formDataForDiscord = new FormData();
-          const fileBlob = new Blob([formData.file.data], { type: formData.file.mimeType });
-          formDataForDiscord.append('file', fileBlob, formData.file.filename);
-          formDataForDiscord.append('payload_json', JSON.stringify(webhookPayload));
-
-          const uploadResponse = await fetch(DISCORD_WEBHOOK_URL, {
-            method: 'POST',
-            body: formDataForDiscord
-          });
-
-          if (uploadResponse.ok) {
-            console.log('[CONTACT] File uploaded to Discord successfully');
-            fileUploadResult = 'uploaded';
-          } else {
-            console.error('[CONTACT] Discord file upload failed:', uploadResponse.status);
-            fileUploadResult = 'failed';
-          }
-        } catch (uploadError) {
-          console.error('[CONTACT] File upload error:', uploadError);
-          fileUploadResult = 'failed';
-        }
-      } else {
-        // 8MB-10MBの場合は、ファイル情報のみ送信
-        embed.fields.push({
-          name: '📎 Attachment',
-          value: `File: ${formData.file.filename}\nSize: ${formatFileSize(formData.file.size)}\n⚠️ File too large for Discord (>8MB). Saved separately.`,
-          inline: false
-        });
-        fileUploadResult = 'too_large';
-      }
-    }
-
-    // ファイルアップロードが失敗した場合や、8MB以上の場合は、Embedのみ送信
-    if (!fileUploadResult || fileUploadResult !== 'uploaded') {
-      if (formData.file && fileUploadResult !== 'too_large') {
-        embed.fields.push({
-          name: '📎 Attachment',
-          value: `File: ${formData.file.filename}\nSize: ${formatFileSize(formData.file.size)}`,
-          inline: false
-        });
-      }
-
-      const response = await fetch(DISCORD_WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(webhookPayload)
-      });
-
-      if (!response.ok) {
-        throw new Error(`Discord webhook failed: ${response.status}`);
-      }
+    if (!response.ok) {
+      throw new Error(`Discord webhook failed: ${response.status}`);
     }
 
     console.log('[CONTACT] Successfully sent to Discord');
@@ -201,8 +154,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         status: 'success',
-        message: 'Your message has been sent successfully!',
-        fileStatus: fileUploadResult
+        message: 'Your message has been sent successfully!'
       })
     };
 
@@ -220,51 +172,55 @@ exports.handler = async (event) => {
   }
 };
 
-// FormDataパーサー
-function parseMultipartForm(event) {
+// 簡易的なマルチパートフォームパーサー
+function parseMultipartFormSimple(event) {
   return new Promise((resolve, reject) => {
-    const formData = {};
-    
-    // base64デコード
-    const bodyBuffer = Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8');
-    
-    const bb = busboy({ 
-      headers: event.headers 
-    });
+    try {
+      const body = event.isBase64Encoded 
+        ? Buffer.from(event.body, 'base64').toString('utf-8')
+        : event.body;
+      
+      const contentType = event.headers['content-type'] || event.headers['Content-Type'];
+      const boundary = contentType.split('boundary=')[1];
+      
+      if (!boundary) {
+        return reject(new Error('No boundary found'));
+      }
 
-    bb.on('field', (fieldname, val) => {
-      formData[fieldname] = val;
-    });
+      const parts = body.split(`--${boundary}`);
+      const formData = {};
 
-    bb.on('file', (fieldname, file, info) => {
-      const { filename, encoding, mimeType } = info;
-      const chunks = [];
+      parts.forEach(part => {
+        if (!part || part === '--\r\n' || part === '--') return;
 
-      file.on('data', (data) => {
-        chunks.push(data);
+        const [headerSection, ...bodyParts] = part.split('\r\n\r\n');
+        if (!headerSection) return;
+
+        const nameMatch = headerSection.match(/name="([^"]+)"/);
+        if (!nameMatch) return;
+
+        const fieldName = nameMatch[1];
+        const fieldValue = bodyParts.join('\r\n\r\n').trim().replace(/\r\n--$/, '');
+
+        // ファイルの場合
+        const filenameMatch = headerSection.match(/filename="([^"]+)"/);
+        if (filenameMatch) {
+          const contentTypeMatch = headerSection.match(/Content-Type: ([^\r\n]+)/);
+          formData.file = {
+            filename: filenameMatch[1],
+            mimeType: contentTypeMatch ? contentTypeMatch[1] : 'application/octet-stream',
+            size: Buffer.byteLength(fieldValue),
+            data: fieldValue
+          };
+        } else {
+          formData[fieldName] = fieldValue;
+        }
       });
 
-      file.on('end', () => {
-        formData.file = {
-          filename: filename,
-          mimeType: mimeType,
-          encoding: encoding,
-          data: Buffer.concat(chunks),
-          size: Buffer.concat(chunks).length
-        };
-      });
-    });
-
-    bb.on('finish', () => {
       resolve(formData);
-    });
-
-    bb.on('error', (error) => {
+    } catch (error) {
       reject(error);
-    });
-
-    bb.write(bodyBuffer);
-    bb.end();
+    }
   });
 }
 

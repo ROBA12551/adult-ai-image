@@ -1,0 +1,26 @@
+{
+  "name": "anime-gallery",
+  "version": "1.0.0",
+  "description": "Adult anime character image gallery with download functionality",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required'",
+    "deploy": "netlify deploy --prod"
+  },
+  "keywords": [
+    "anime",
+    "gallery",
+    "images",
+    "adult",
+    "netlify"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/busboy": "^2.1.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
