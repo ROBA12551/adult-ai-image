@@ -713,291 +713,111 @@
       <a href="#" class="footer-link">DMCA</a>
     </div>
   </footer>
+<script>
+  const state = {
+    images: [],
+    filteredImages: [],
+    currentPage: 0,
+    imagesPerPage: 12
+  };
 
-  <script>
-    const state = {
-      images: [],
-      filteredImages: [],
-      currentFilter: 'all',
-      currentPage: 0,
-      imagesPerPage: 12,
-      currentLanguage: 'en',
-      currentImageId: null
-    };
+  // クリックで確実にダウンロード（CORSで落ちたら新規タブに逃がす）
   function downloadByUrl(url) {
+    // まずは a[download] を試す（軽い）
     try {
       const a = document.createElement('a');
       a.href = url;
-      a.download = url.split('/').pop(); // ファイル名
+      a.download = url.split('/').pop() || 'image.jpg';
       document.body.appendChild(a);
       a.click();
       a.remove();
+      return;
+    } catch (e) {}
+
+    // 失敗したら新規タブ
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+  window.downloadByUrl = downloadByUrl; // ← onclick から確実に見えるようにする
+
+  function enterSite() {
+    localStorage.setItem('ageVerified', 'true');
+    document.getElementById('ageGate').classList.add('hidden');
+    loadImages();
+  }
+  window.enterSite = enterSite;
+
+  function exitSite() {
+    location.href = 'https://www.google.com';
+  }
+  window.exitSite = exitSite;
+
+  async function loadImages() {
+    try {
+      const response = await fetch('/.netlify/functions/get-images');
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        state.images = data.images || [];
+        state.filteredImages = state.images;
+        state.currentPage = 0;
+
+        document.getElementById('totalImages').textContent = state.images.length;
+        renderGallery();
+      }
     } catch (e) {
-      alert('Download failed');
       console.error(e);
+      alert('Failed to load images');
     }
   }
-    function enterSite() {
-      localStorage.setItem('ageVerified', 'true');
+
+  function renderGallery() {
+    const gallery = document.getElementById('gallery');
+    const start = state.currentPage * state.imagesPerPage;
+    const end = start + state.imagesPerPage;
+    const imagesToShow = state.filteredImages.slice(start, end);
+
+    if (state.currentPage === 0) gallery.innerHTML = '';
+
+    for (const image of imagesToShow) {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+
+      // ✅ ここが重要：必ずバッククォートでテンプレート文字列にする
+      card.innerHTML = `
+        <div class="image-wrapper">
+          <img src="${image.thumbnail || image.fullUrl}" loading="lazy">
+        </div>
+        <div class="image-info">
+          <div class="image-actions">
+            <button class="action-btn download"
+              onclick="event.stopPropagation(); downloadByUrl('${(image.fullUrl || '').replace(/'/g, "\\'")}')">
+              Download
+            </button>
+          </div>
+        </div>
+      `;
+
+      gallery.appendChild(card);
+    }
+
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    loadMoreBtn.style.display = end >= state.filteredImages.length ? 'none' : 'block';
+  }
+
+  function loadMore() {
+    state.currentPage++;
+    renderGallery();
+  }
+  window.loadMore = loadMore;
+
+  // 初期起動
+  window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('ageVerified') === 'true') {
       document.getElementById('ageGate').classList.add('hidden');
+      loadImages();
     }
+  });
+</script>
 
-    function exitSite() {
-      window.location.href = 'https://www.google.com';
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('ageVerified') === 'true') {
-        document.getElementById('ageGate').classList.add('hidden');
-        loadImages();
-      }
-    });
-
-    async function loadImages() {
-      try {
-        const response = await fetch('/.netlify/functions/get-images');
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-          state.images = data.images;
-          state.filteredImages = data.images;
-          updateStats();
-          renderGallery();
-        }
-      } catch (error) {
-        console.error('Error loading images:', error);
-        showNotification('Failed to load images');
-      }
-    }
-
-    function updateStats() {
-      document.getElementById('totalImages').textContent = state.images.length;
-      document.getElementById('totalDownloads').textContent = 
-        state.images.reduce((sum, img) => sum + (img.downloads || 0), 0);
-      
-      const uniqueCharacters = new Set(state.images.map(img => img.character));
-      document.getElementById('totalCharacters').textContent = uniqueCharacters.size;
-    }
-
-    function renderGallery() {
-      const gallery = document.getElementById('gallery');
-      const start = state.currentPage * state.imagesPerPage;
-      const end = start + state.imagesPerPage;
-      const imagesToShow = state.filteredImages.slice(start, end);
-
-      if (state.currentPage === 0) {
-        gallery.innerHTML = '';
-      }
-
-      imagesToShow.forEach(image => {
-        const card = createImageCard(image);
-        gallery.appendChild(card);
-      });
-
-      const loadMoreBtn = document.getElementById('loadMoreBtn');
-      if (end >= state.filteredImages.length) {
-        loadMoreBtn.style.display = 'none';
-      } else {
-        loadMoreBtn.style.display = 'block';
-      }
-    }
-
-function createImageCard(image) {
-  const card = document.createElement('div');
-  card.className = 'image-card';
-
-  card.innerHTML = `
-    <div class="image-wrapper">
-      <img src="${image.thumbnail}" loading="lazy">
-    </div>
-    <div class="image-info">
-      <div class="image-actions">
-        <button class="action-btn download"
-          onclick="event.stopPropagation(); downloadByUrl('${image.fullUrl}')">
-          Download
-        </button>
-      </div>
-    </div>
-  `;
-  return card;
-}
-
-
-    function filterImages(filter) {
-      state.currentFilter = filter;
-      state.currentPage = 0;
-
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.filter === filter);
-      });
-
-      switch (filter) {
-        case 'new':
-          state.filteredImages = [...state.images].sort((a, b) => 
-            new Date(b.uploadDate) - new Date(a.uploadDate)
-          );
-          break;
-        case 'popular':
-          state.filteredImages = [...state.images].sort((a, b) => 
-            (b.downloads || 0) - (a.downloads || 0)
-          );
-          break;
-        case 'hd':
-          state.filteredImages = state.images.filter(img => img.quality === 'HD');
-          break;
-        default:
-          state.filteredImages = state.images;
-      }
-
-      renderGallery();
-    }
-
-    function searchImages() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      
-      if (!query) {
-        state.filteredImages = state.images;
-      } else {
-        state.filteredImages = state.images.filter(img => 
-          img.title.toLowerCase().includes(query) ||
-          img.character.toLowerCase().includes(query) ||
-          img.series.toLowerCase().includes(query) ||
-          img.tags.some(tag => tag.toLowerCase().includes(query))
-        );
-      }
-
-      state.currentPage = 0;
-      renderGallery();
-    }
-
-    function loadMore() {
-      state.currentPage++;
-      renderGallery();
-    }
-
-    function openModal(image) {
-      state.currentImageId = image.id;
-      document.getElementById('modalImage').src = image.fullUrl;
-      document.getElementById('modalTitle').textContent = image.title;
-      document.getElementById('modalSize').textContent = formatFileSize(image.size);
-      document.getElementById('modalDate').textContent = formatDate(image.uploadDate);
-      
-      const tagsContainer = document.getElementById('modalTags');
-      tagsContainer.innerHTML = image.tags.map(tag => 
-        `<span class="tag">${tag}</span>`
-      ).join('');
-
-      document.getElementById('imageModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      document.getElementById('imageModal').classList.remove('show');
-      document.body.style.overflow = 'auto';
-    }
-
-    async function downloadImage() {
-      if (!state.currentImageId) return;
-      
-      try {
-        showNotification('Downloading...');
-        
-        const response = await fetch('/.netlify/functions/download-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageId: state.currentImageId })
-        });
-        
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-          window.open(data.downloadUrl, '_blank');
-          showNotification('Download started!', 'success');
-        }
-      } catch (error) {
-        console.error('Download error:', error);
-        showNotification('Download failed');
-      }
-    }
-
-    async function downloadImageDirect(imageId) {
-      try {
-        const response = await fetch('/.netlify/functions/download-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageId })
-        });
-        
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-          window.open(data.downloadUrl, '_blank');
-          showNotification('Download started!', 'success');
-        }
-      } catch (error) {
-        showNotification('Download failed');
-      }
-    }
-
-    async function likeImage(imageId) {
-      try {
-        await fetch('/.netlify/functions/like-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageId })
-        });
-        showNotification('Liked!', 'success');
-      } catch (error) {
-        console.error('Like error:', error);
-      }
-    }
-
-    function shareImage() {
-      const url = window.location.href;
-      if (navigator.share) {
-        navigator.share({
-          title: 'AnimeGallery',
-          text: 'Check out this anime image!',
-          url: url
-        });
-      } else {
-        navigator.clipboard.writeText(url);
-        showNotification('URL copied!', 'success');
-      }
-    }
-
-    function toggleLanguage() {
-      state.currentLanguage = state.currentLanguage === 'en' ? 'ja' : 'en';
-      showNotification('Language switched', 'success');
-    }
-
-    function showNotification(message, type = 'info') {
-      const notification = document.getElementById('notification');
-      notification.textContent = message;
-      notification.className = `notification show ${type}`;
-      setTimeout(() => notification.classList.remove('show'), 3000);
-    }
-
-    function formatFileSize(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-    }
-
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('ja-JP');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchImages();
-      });
-    });
-
-    document.getElementById('imageModal')?.addEventListener('click', (e) => {
-      if (e.target.id === 'imageModal') closeModal();
-    });
-  </script>
 </body>
 </html>
